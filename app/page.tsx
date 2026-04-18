@@ -437,8 +437,8 @@ export default function VoicePage() {
 
         /* In iframe: moon as the i-dot, centered on the dotless-i */
         .moon--wordmark.moon--iframe {
-          top: 16px;
-          left: calc(50vw + 9px);
+          top: 14px;
+          left: calc(50vw + 12px);
           width: 10px;
           height: 10px;
         }
@@ -487,8 +487,8 @@ export default function VoicePage() {
         }
 
         .moon--returning.moon--iframe {
-          top: 15px;
-          left: calc(50vw + 3px);
+          top: 14px;
+          left: calc(50vw + 12px);
           width: 10px;
           height: 10px;
         }
@@ -525,8 +525,8 @@ export default function VoicePage() {
             height: 160px !important;
           }
           .moon--returning.moon--iframe {
-            top: 6px !important;
-            left: calc(50vw + 3px) !important;
+            top: 8px !important;
+            left: calc(50vw + 12px) !important;
             width: 16px !important;
             height: 16px !important;
           }
