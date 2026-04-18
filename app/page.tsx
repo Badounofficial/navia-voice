@@ -33,9 +33,22 @@ export default function VoicePage() {
   const [soundMuted, setSoundMuted] = useState(false);
   const [audioReady, setAudioReady] = useState(false);
   const [inIframe, setInIframe] = useState(false);
+  const [theme, setTheme] = useState<'night' | 'day'>('night');
 
   useEffect(() => {
-    setInIframe(window.self !== window.top);
+    const isIframe = window.self !== window.top;
+    setInIframe(isIframe);
+
+    // Listen for theme sync from parent site
+    if (isIframe) {
+      const onMessage = (e: MessageEvent) => {
+        if (e.data?.type === 'navia-theme' && (e.data.theme === 'day' || e.data.theme === 'night')) {
+          setTheme(e.data.theme);
+        }
+      };
+      window.addEventListener('message', onMessage);
+      return () => window.removeEventListener('message', onMessage);
+    }
   }, []);
 
   const pipelineRef = useRef<VoicePipeline | null>(null);
@@ -191,7 +204,7 @@ export default function VoicePage() {
     ) : '';
 
   return (
-    <main className={`navia-main ${isMoonActive ? 'moon-is-active' : ''}`}>
+    <main className={`navia-main ${isMoonActive ? 'moon-is-active' : ''} ${theme === 'day' ? 'theme-day' : 'theme-night'}`}>
       <div className="stars" aria-hidden="true" />
 
       {isMoonActive && <div className="center-glow" />}
@@ -293,7 +306,31 @@ export default function VoicePage() {
           background-image: radial-gradient(ellipse at top, #3E3A7A 0%, #2B2940 55%, #1d1b2e 100%);
           color: var(--text);
           -webkit-font-smoothing: antialiased;
+          transition: background 0.6s ease, color 0.6s ease;
         }
+
+        /* Day theme */
+        .theme-day ~ style, /* dummy selector */
+        .theme-day {
+          --bg: #F4EFF5;
+          --text: rgba(43, 41, 64, 0.88);
+          --text-soft: rgba(43, 41, 64, 0.55);
+          --text-strong: #2B2940;
+          --accent-rose: #C97A8E;
+          --accent-aube: #8E7BB8;
+          --moon-glow: rgba(208, 196, 232, 0.38);
+          --moon-glow-soft: rgba(230, 205, 220, 0.18);
+        }
+        .theme-day {
+          background: #F4EFF5 !important;
+          background-image: radial-gradient(ellipse at top, #F8F3F8 0%, #F4EFF5 55%, #EDE6EE 100%) !important;
+        }
+        .theme-day .stars { opacity: 0; }
+        .theme-day .sound-toggle {
+          border-color: rgba(43, 41, 64, 0.12);
+          color: rgba(43, 41, 64, 0.55);
+        }
+        .theme-day .wordmark { color: #2B2940; }
 
         .stars {
           position: fixed; inset: 0; pointer-events: none; z-index: 0;
