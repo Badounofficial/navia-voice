@@ -535,7 +535,7 @@ export default function VoicePage() {
             max-height: calc(50vh - 120px) !important;
           }
           .status-label {
-            top: calc(50vh + 90px) !important;
+            top: calc(50vh + 110px) !important;
           }
         }
 
@@ -563,7 +563,7 @@ export default function VoicePage() {
 
         /* Status */
         .status-label {
-          position: fixed; top: calc(50% + ${MOON_CENTER_SIZE / 2 + 20}px); left: 50%;
+          position: fixed; top: calc(50% + ${MOON_CENTER_SIZE / 2 + 40}px); left: 50%;
           transform: translateX(-50%);
           font-family: 'Fraunces', Georgia, serif;
           font-size: 0.85rem; font-style: italic;
