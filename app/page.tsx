@@ -199,11 +199,18 @@ export default function VoicePage() {
       const moon = moonContainerRef.current;
       if (!iDot || !moon) return;
       const rect = iDot.getBoundingClientRect();
-      // Center of the i character, 3px above (matching main site's top: -3px)
+      // Position moon centered on the dotless-i, 3px above baseline (matching main site)
+      const moonSize = 10;
       const dotTop = rect.top - 3;
-      const dotLeft = rect.left + rect.width / 2 - 5; // 5 = half of 10px moon
+      const dotLeft = rect.left + (rect.width - moonSize) / 2;
       moon.style.setProperty('--idot-top', dotTop + 'px');
       moon.style.setProperty('--idot-left', dotLeft + 'px');
+    }
+    // Wait for fonts to load so character widths are final
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(syncMoonToIDot);
+    } else {
+      setTimeout(syncMoonToIDot, 300);
     }
     syncMoonToIDot();
     window.addEventListener('resize', syncMoonToIDot);
