@@ -357,7 +357,10 @@ export default function VoicePage() {
           pointer-events: none;
           will-change: top, left, width, height, opacity;
           overflow: hidden;
-          background: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/17271/lroc_color_poles_1k.jpg') center/cover;
+          background: url('/moon-color.jpg') center/cover;
+          background-color: #3a3a4a;
+          -webkit-mask-image: -webkit-radial-gradient(white, black);
+          mask-image: radial-gradient(white, black);
         }
 
         /*
