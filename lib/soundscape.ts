@@ -17,10 +17,10 @@
  */
 
 const CONFIG = {
-  // Ducking - keep music present even when Navia speaks
-  duckLevel: 0.30,         // Keep 30% when Navia speaks
-  duckAttack: 0.6,         // Seconds to fade down (smooth, not brutal)
-  duckRelease: 1.5,        // Seconds to fade back up
+  // Ducking - keep music clearly present even when Navia speaks
+  duckLevel: 0.50,         // Keep 50% when Navia speaks (warm bed, never silent)
+  duckAttack: 1.0,         // Seconds to fade down (very gentle)
+  duckRelease: 2.0,        // Seconds to fade back up (slow return)
 
   // Master
   masterVolume: 0.55,      // Overall volume

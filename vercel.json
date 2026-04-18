@@ -1,12 +1,4 @@
 {
   "framework": "nextjs",
-  "regions": ["iad1"],
-  "env": {
-    "OPENAI_API_KEY": "@openai-api-key",
-    "ANTHROPIC_API_KEY": "@anthropic-api-key",
-    "ELEVENLABS_API_KEY": "@elevenlabs-api-key",
-    "ELEVENLABS_VOICE_ID": "@elevenlabs-voice-id",
-    "HUME_API_KEY": "@hume-api-key",
-    "HUME_SECRET_KEY": "@hume-secret-key"
-  }
+  "regions": ["iad1"]
 }
