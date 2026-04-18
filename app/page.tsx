@@ -192,31 +192,6 @@ export default function VoicePage() {
     };
   }, []);
 
-  // ─── Measure i-dot position for pixel-perfect moon placement ───
-  useEffect(() => {
-    function syncMoonToIDot() {
-      const iDot = iDotRef.current;
-      const moon = moonContainerRef.current;
-      if (!iDot || !moon) return;
-      const rect = iDot.getBoundingClientRect();
-      // Position moon centered on the dotless-i, 3px above baseline (matching main site)
-      const moonSize = 10;
-      const dotTop = rect.top - 3;
-      const dotLeft = rect.left + (rect.width - moonSize) / 2;
-      moon.style.setProperty('--idot-top', dotTop + 'px');
-      moon.style.setProperty('--idot-left', dotLeft + 'px');
-    }
-    // Wait for fonts to load so character widths are final
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(syncMoonToIDot);
-    } else {
-      setTimeout(syncMoonToIDot, 300);
-    }
-    syncMoonToIDot();
-    window.addEventListener('resize', syncMoonToIDot);
-    return () => window.removeEventListener('resize', syncMoonToIDot);
-  }, [moonPhase]);
-
   // ─── Determine visual state ───
   const isMoonActive = moonPhase === 'center' || moonPhase === 'traveling';
 
@@ -235,7 +210,7 @@ export default function VoicePage() {
       {isMoonActive && <div className="center-glow" />}
 
       {/* Top bar */}
-      <nav className={`top-bar ${inIframe ? 'top-bar--iframe' : ''}`}>
+      <nav className={`top-bar ${inIframe ? 'top-bar--iframe' : ''} ${(moonPhase === 'traveling' || moonPhase === 'center') ? 'moon-active' : ''}`}>
         {!inIframe && (
           <button
             className="sound-toggle"
@@ -416,10 +391,28 @@ export default function VoicePage() {
           position: relative; display: inline-block;
         }
 
-        /*
-         * The i-dot is ALWAYS hidden. The moon div IS the dot.
-         * Using dotless-i character (&#305;) so no native dot.
-         */
+        /* In iframe: CSS ::before is the i-dot moon (like main site).
+           No JS measurement needed. Moon div handles traveling/center only. */
+        .top-bar--iframe .wordmark-i::before {
+          content: '';
+          position: absolute;
+          top: -3px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background: url('/moon-color.jpg') center/cover;
+          background-color: #3a3a4a;
+          box-shadow: 0 0 6px rgba(245, 240, 230, 0.6),
+                      0 0 14px rgba(245, 240, 230, 0.25);
+          z-index: 11;
+          transition: opacity 0.3s ease;
+        }
+        /* Hide CSS dot when moon div is active (traveling/center) */
+        .top-bar--iframe.moon-active .wordmark-i::before {
+          opacity: 0;
+        }
 
         /* ─── THE MOON ─── */
         .moon {
@@ -460,12 +453,10 @@ export default function VoicePage() {
                   drop-shadow(0 0 14px rgba(245, 240, 230, 0.25));
         }
 
-        /* In iframe: moon as the i-dot, measured from actual DOM position */
+        /* In iframe: hide moon div when at wordmark (CSS ::before handles it) */
         .moon--wordmark.moon--iframe {
-          top: var(--idot-top, 14px);
-          left: var(--idot-left, calc(50vw + 12px));
-          width: 10px;
-          height: 10px;
+          opacity: 0 !important;
+          pointer-events: none;
         }
 
         .moon--traveling {
@@ -512,10 +503,8 @@ export default function VoicePage() {
         }
 
         .moon--returning.moon--iframe {
-          top: var(--idot-top, 14px);
-          left: var(--idot-left, calc(50vw + 12px));
-          width: 10px;
-          height: 10px;
+          opacity: 0 !important;
+          pointer-events: none;
         }
 
         /* ── Breathing animations ── */
@@ -550,10 +539,7 @@ export default function VoicePage() {
             height: 160px !important;
           }
           .moon--returning.moon--iframe {
-            top: var(--idot-top, 8px) !important;
-            left: var(--idot-left, calc(50vw + 12px)) !important;
-            width: 10px !important;
-            height: 10px !important;
+            opacity: 0 !important;
           }
           .response-area {
             top: calc(50vh + 90px) !important;
