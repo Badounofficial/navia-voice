@@ -32,6 +32,11 @@ export default function VoicePage() {
   const [error, setError] = useState<string | null>(null);
   const [soundMuted, setSoundMuted] = useState(false);
   const [audioReady, setAudioReady] = useState(false);
+  const [inIframe, setInIframe] = useState(false);
+
+  useEffect(() => {
+    setInIframe(window.self !== window.top);
+  }, []);
 
   const pipelineRef = useRef<VoicePipeline | null>(null);
   const responseBufferRef = useRef('');
@@ -182,22 +187,24 @@ export default function VoicePage() {
       {isMoonActive && <div className="center-glow" />}
 
       {/* Top bar */}
-      <nav className="top-bar">
-        <button
-          className="sound-toggle"
-          onClick={() => setSoundMuted(!soundMuted)}
-          aria-label={soundMuted ? 'Unmute' : 'Mute'}
-        >
-          {soundMuted ? (
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <path d="M11 5L6 9H2v6h4l5 4V5z" /><line x1="23" y1="9" x2="17" y2="15" /><line x1="17" y1="9" x2="23" y2="15" />
-            </svg>
-          ) : (
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <path d="M11 5L6 9H2v6h4l5 4V5z" /><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
-            </svg>
-          )}
-        </button>
+      <nav className={`top-bar ${inIframe ? 'top-bar--iframe' : ''}`}>
+        {!inIframe && (
+          <button
+            className="sound-toggle"
+            onClick={() => setSoundMuted(!soundMuted)}
+            aria-label={soundMuted ? 'Unmute' : 'Mute'}
+          >
+            {soundMuted ? (
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M11 5L6 9H2v6h4l5 4V5z" /><line x1="23" y1="9" x2="17" y2="15" /><line x1="17" y1="9" x2="23" y2="15" />
+              </svg>
+            ) : (
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M11 5L6 9H2v6h4l5 4V5z" /><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
+              </svg>
+            )}
+          </button>
+        )}
 
         {/* Wordmark */}
         <div
@@ -320,6 +327,14 @@ export default function VoicePage() {
           opacity: 0.78; transition: opacity 0.4s ease; cursor: pointer;
         }
         .wordmark-wrap:hover { opacity: 1; }
+
+        /* When in iframe: center wordmark at top */
+        .top-bar--iframe {
+          justify-content: center;
+        }
+        .top-bar--iframe .wordmark-wrap {
+          opacity: 1;
+        }
         .wordmark {
           font-family: 'Fraunces', Georgia, serif;
           font-weight: 400; font-size: 17px;
