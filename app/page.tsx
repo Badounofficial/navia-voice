@@ -156,7 +156,17 @@ export default function VoicePage() {
       setIsStarted(true);
     } catch (err) {
       console.error('[Navia] Pipeline failed to start:', err);
-      setError('Microphone access is needed for Navia to hear you.');
+      const isIframe = window.self !== window.top;
+      if (isIframe) {
+        // In iframe: open voice page directly for full microphone access
+        window.top?.postMessage({ type: 'navia-open-direct' }, '*');
+        setError('Opening Navia in a new window for voice access...');
+        setTimeout(() => {
+          window.open('https://navia-voice.vercel.app', '_blank');
+        }, 500);
+      } else {
+        setError('Please allow microphone access in your browser to talk with Navia.');
+      }
       setMoonPhase('wordmark');
     }
   }, [moonPhase]);
@@ -222,7 +232,7 @@ export default function VoicePage() {
       {/* THE MOON: single element, all states */}
       <div
         ref={moonContainerRef}
-        className={`moon moon--${moonPhase} ${breatheClass}`}
+        className={`moon moon--${moonPhase} ${breatheClass} ${inIframe ? 'moon--iframe' : ''}`}
         onClick={moonPhase === 'wordmark' ? handleStart : undefined}
       />
 
@@ -328,9 +338,10 @@ export default function VoicePage() {
         }
         .wordmark-wrap:hover { opacity: 1; }
 
-        /* When in iframe: center wordmark at top */
+        /* When in iframe: center wordmark at top with room for moon above */
         .top-bar--iframe {
           justify-content: center;
+          padding-top: 28px;
         }
         .top-bar--iframe .wordmark-wrap {
           opacity: 1;
@@ -388,6 +399,14 @@ export default function VoicePage() {
                   drop-shadow(0 0 14px rgba(245, 240, 230, 0.25));
         }
 
+        /* In iframe: moon sits centered above wordmark, slightly larger */
+        .moon--wordmark.moon--iframe {
+          top: 6px;
+          left: calc(50vw - 8px);
+          width: 16px;
+          height: 16px;
+        }
+
         .moon--traveling {
           top: calc(50vh - ${MOON_CENTER_SIZE / 2}px);
           left: calc(50vw - ${MOON_CENTER_SIZE / 2}px);
@@ -429,6 +448,13 @@ export default function VoicePage() {
                       filter 2.5s ease;
           filter: drop-shadow(0 0 6px rgba(245, 240, 230, 0.6))
                   drop-shadow(0 0 14px rgba(245, 240, 230, 0.25));
+        }
+
+        .moon--returning.moon--iframe {
+          top: 6px;
+          left: calc(50vw - 8px);
+          width: 16px;
+          height: 16px;
         }
 
         /* ── Breathing animations ── */
