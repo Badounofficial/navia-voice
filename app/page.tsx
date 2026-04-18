@@ -192,6 +192,24 @@ export default function VoicePage() {
     };
   }, []);
 
+  // ─── Measure i-dot position for pixel-perfect moon placement ───
+  useEffect(() => {
+    function syncMoonToIDot() {
+      const iDot = iDotRef.current;
+      const moon = moonContainerRef.current;
+      if (!iDot || !moon) return;
+      const rect = iDot.getBoundingClientRect();
+      // Center of the i character, 3px above (matching main site's top: -3px)
+      const dotTop = rect.top - 3;
+      const dotLeft = rect.left + rect.width / 2 - 5; // 5 = half of 10px moon
+      moon.style.setProperty('--idot-top', dotTop + 'px');
+      moon.style.setProperty('--idot-left', dotLeft + 'px');
+    }
+    syncMoonToIDot();
+    window.addEventListener('resize', syncMoonToIDot);
+    return () => window.removeEventListener('resize', syncMoonToIDot);
+  }, [moonPhase]);
+
   // ─── Determine visual state ───
   const isMoonActive = moonPhase === 'center' || moonPhase === 'traveling';
 
@@ -435,10 +453,10 @@ export default function VoicePage() {
                   drop-shadow(0 0 14px rgba(245, 240, 230, 0.25));
         }
 
-        /* In iframe: moon as the i-dot, centered on the dotless-i */
+        /* In iframe: moon as the i-dot, measured from actual DOM position */
         .moon--wordmark.moon--iframe {
-          top: 14px;
-          left: calc(50vw + 12px);
+          top: var(--idot-top, 14px);
+          left: var(--idot-left, calc(50vw + 12px));
           width: 10px;
           height: 10px;
         }
@@ -487,8 +505,8 @@ export default function VoicePage() {
         }
 
         .moon--returning.moon--iframe {
-          top: 14px;
-          left: calc(50vw + 12px);
+          top: var(--idot-top, 14px);
+          left: var(--idot-left, calc(50vw + 12px));
           width: 10px;
           height: 10px;
         }
@@ -525,10 +543,10 @@ export default function VoicePage() {
             height: 160px !important;
           }
           .moon--returning.moon--iframe {
-            top: 8px !important;
-            left: calc(50vw + 12px) !important;
-            width: 16px !important;
-            height: 16px !important;
+            top: var(--idot-top, 8px) !important;
+            left: var(--idot-left, calc(50vw + 12px)) !important;
+            width: 10px !important;
+            height: 10px !important;
           }
           .response-area {
             top: calc(50vh + 90px) !important;
