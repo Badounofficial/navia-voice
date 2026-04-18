@@ -2,7 +2,6 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { VoicePipeline, type PipelineState } from '@/lib/pipeline';
-import { renderMoon } from '@/lib/moon-texture';
 
 /**
  * Navia Voice Interface
@@ -38,22 +37,8 @@ export default function VoicePage() {
   const responseBufferRef = useRef('');
   const idleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const ambientRef = useRef<HTMLAudioElement | null>(null);
-  const moonCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const moonContainerRef = useRef<HTMLDivElement | null>(null);
   const iDotRef = useRef<HTMLSpanElement | null>(null);
-
-  // ─── Render realistic moon texture once ───
-  useEffect(() => {
-    const canvas = renderMoon(MOON_CENTER_SIZE * 2); // 2x for retina
-    canvas.style.width = '100%';
-    canvas.style.height = '100%';
-    moonCanvasRef.current = canvas;
-
-    if (moonContainerRef.current) {
-      moonContainerRef.current.innerHTML = '';
-      moonContainerRef.current.appendChild(canvas);
-    }
-  }, []);
 
   // ─── Ambient sound: plays immediately ───
   useEffect(() => {
@@ -350,12 +335,8 @@ export default function VoicePage() {
           border-radius: 50%;
           pointer-events: none;
           will-change: top, left, width, height, opacity;
-          /* Canvas inside fills this container */
-          overflow: visible;
-        }
-        .moon canvas {
-          display: block;
-          border-radius: 50%;
+          overflow: hidden;
+          background: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/17271/lroc_color_poles_1k.jpg') center/cover;
         }
 
         /*
