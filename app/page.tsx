@@ -480,6 +480,29 @@ export default function VoicePage() {
                   drop-shadow(0 0 140px rgba(245, 240, 230, 0.2)) !important;
         }
 
+        /* Smaller moon + adjusted layout in small viewports (widget) */
+        @media (max-height: 700px) {
+          .moon--traveling, .moon--center {
+            top: calc(50vh - 80px) !important;
+            left: calc(50vw - 80px) !important;
+            width: 160px !important;
+            height: 160px !important;
+          }
+          .moon--returning.moon--iframe {
+            top: 6px !important;
+            left: calc(50vw + 3px) !important;
+            width: 16px !important;
+            height: 16px !important;
+          }
+          .response-area {
+            top: calc(50vh + 90px) !important;
+            max-height: calc(50vh - 120px) !important;
+          }
+          .status-label {
+            top: calc(50vh + 90px) !important;
+          }
+        }
+
         /* Center glow */
         .center-glow {
           position: fixed; top: 50%; left: 50%;
@@ -513,9 +536,11 @@ export default function VoicePage() {
 
         /* Response */
         .response-area {
-          position: fixed; bottom: 120px; left: 50%;
+          position: fixed; top: calc(50% + ${MOON_CENTER_SIZE / 2 + 16}px); left: 50%;
           transform: translateX(-50%);
           max-width: 500px; width: 90%;
+          max-height: calc(50% - ${MOON_CENTER_SIZE / 2 + 60}px);
+          overflow-y: auto;
           text-align: center; animation: fadeUp 0.6s ease;
         }
         .response-text {
@@ -526,7 +551,7 @@ export default function VoicePage() {
 
         /* Transcript */
         .transcript-area {
-          position: fixed; bottom: 60px; left: 50%;
+          position: fixed; bottom: 24px; left: 50%;
           transform: translateX(-50%);
           max-width: 400px; width: 90%; text-align: center;
         }
