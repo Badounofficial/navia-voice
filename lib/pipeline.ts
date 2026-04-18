@@ -83,8 +83,10 @@ export class VoicePipeline {
     this.player.init();
 
     // Start the binaural soundscape (shares AudioContext with player)
+    // Skip when embedded in iframe (parent site provides ambient sound)
+    const inIframe = typeof window !== 'undefined' && window.self !== window.top;
     const ctx = this.player.getAudioContext();
-    if (ctx) {
+    if (ctx && !inIframe) {
       // Don't await - let it load in background
       this.soundscape.start(ctx).catch(() => {
         // Soundscape is non-critical

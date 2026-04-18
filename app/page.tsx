@@ -40,8 +40,14 @@ export default function VoicePage() {
   const moonContainerRef = useRef<HTMLDivElement | null>(null);
   const iDotRef = useRef<HTMLSpanElement | null>(null);
 
-  // ─── Ambient sound: plays immediately ───
+  // ─── Ambient sound: plays only when NOT in iframe ───
   useEffect(() => {
+    // Skip soundscape when embedded in iframe (parent site provides it)
+    if (window.self !== window.top) {
+      setAudioReady(true);
+      return;
+    }
+
     const audio = new Audio('/ambient.mp3');
     audio.loop = true;
     audio.volume = 0;
