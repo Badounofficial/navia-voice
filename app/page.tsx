@@ -256,8 +256,8 @@ export default function VoicePage() {
         </div>
       )}
 
-      {/* Status indicator */}
-      {(moonPhase === 'center' || moonPhase === 'traveling') && (
+      {/* Status indicator (hidden when a response is showing) */}
+      {(moonPhase === 'center' || moonPhase === 'traveling') && !response && (
         <p className="status-label">
           {state === 'idle' && moonPhase === 'traveling' && 'Connecting...'}
           {state === 'idle' && moonPhase === 'center' && 'I am here'}
