@@ -375,10 +375,9 @@ export default function VoicePage() {
         }
         .wordmark-wrap:hover { opacity: 1; }
 
-        /* When in iframe: center wordmark at top with room for moon above */
+        /* When in iframe: center wordmark at top */
         .top-bar--iframe {
           justify-content: center;
-          padding-top: 28px;
         }
         .top-bar--iframe .wordmark-wrap {
           opacity: 1;
@@ -436,12 +435,12 @@ export default function VoicePage() {
                   drop-shadow(0 0 14px rgba(245, 240, 230, 0.25));
         }
 
-        /* In iframe: moon rests on top of the i character */
+        /* In iframe: moon as the i-dot, same as main site */
         .moon--wordmark.moon--iframe {
-          top: 18px;
+          top: 15px;
           left: calc(50vw + 3px);
-          width: 12px;
-          height: 12px;
+          width: 10px;
+          height: 10px;
         }
 
         .moon--traveling {
@@ -488,10 +487,10 @@ export default function VoicePage() {
         }
 
         .moon--returning.moon--iframe {
-          top: 18px;
+          top: 15px;
           left: calc(50vw + 3px);
-          width: 12px;
-          height: 12px;
+          width: 10px;
+          height: 10px;
         }
 
         /* ── Breathing animations ── */
