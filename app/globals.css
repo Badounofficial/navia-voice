@@ -1,0 +1,55 @@
+/* Navia Voice - Global Styles */
+/* Brand palette: Night mode (default), Day mode */
+
+:root {
+  /* Night mode (default) */
+  --bg: #2B2940;
+  --bg-soft: #3E3A7A;
+  --text: #F5F0E6;
+  --text-muted: rgba(245, 240, 230, 0.6);
+  --accent-rose: #E8A89D;
+  --accent-aube: #E8C58F;
+  --accent-deep: #4A3D6B;
+  --ring: rgba(232, 168, 157, 0.3);
+  --glow: rgba(232, 197, 143, 0.15);
+}
+
+[data-theme="day"] {
+  --bg: #F4EFF5;
+  --bg-soft: #EFEAF6;
+  --text: #2B2940;
+  --text-muted: rgba(43, 41, 64, 0.6);
+  --accent-rose: #C97A8E;
+  --accent-aube: #8E7BB8;
+  --accent-deep: #4A3D6B;
+  --ring: rgba(142, 123, 184, 0.3);
+  --glow: rgba(142, 123, 184, 0.1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+/* Voice button pulse animation */
+@keyframes pulse-ring {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* Listening state glow */
+@keyframes listening-glow {
+  0%, 100% { box-shadow: 0 0 20px var(--ring), 0 0 40px var(--glow); }
+  50% { box-shadow: 0 0 30px var(--ring), 0 0 60px var(--glow); }
+}
