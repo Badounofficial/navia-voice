@@ -436,12 +436,12 @@ export default function VoicePage() {
                   drop-shadow(0 0 14px rgba(245, 240, 230, 0.25));
         }
 
-        /* In iframe: moon sits above the i-dot of centered wordmark */
+        /* In iframe: moon rests on top of the i character */
         .moon--wordmark.moon--iframe {
-          top: 6px;
+          top: 18px;
           left: calc(50vw + 3px);
-          width: 16px;
-          height: 16px;
+          width: 12px;
+          height: 12px;
         }
 
         .moon--traveling {
@@ -488,10 +488,10 @@ export default function VoicePage() {
         }
 
         .moon--returning.moon--iframe {
-          top: 6px;
+          top: 18px;
           left: calc(50vw + 3px);
-          width: 16px;
-          height: 16px;
+          width: 12px;
+          height: 12px;
         }
 
         /* ── Breathing animations ── */
