@@ -399,10 +399,10 @@ export default function VoicePage() {
                   drop-shadow(0 0 14px rgba(245, 240, 230, 0.25));
         }
 
-        /* In iframe: moon sits centered above wordmark, slightly larger */
+        /* In iframe: moon sits above the i-dot of centered wordmark */
         .moon--wordmark.moon--iframe {
           top: 6px;
-          left: calc(50vw - 8px);
+          left: calc(50vw + 3px);
           width: 16px;
           height: 16px;
         }
@@ -452,7 +452,7 @@ export default function VoicePage() {
 
         .moon--returning.moon--iframe {
           top: 6px;
-          left: calc(50vw - 8px);
+          left: calc(50vw + 3px);
           width: 16px;
           height: 16px;
         }
