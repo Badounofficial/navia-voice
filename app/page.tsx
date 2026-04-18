@@ -435,10 +435,10 @@ export default function VoicePage() {
                   drop-shadow(0 0 14px rgba(245, 240, 230, 0.25));
         }
 
-        /* In iframe: moon as the i-dot, same as main site */
+        /* In iframe: moon as the i-dot, centered on the dotless-i */
         .moon--wordmark.moon--iframe {
-          top: 15px;
-          left: calc(50vw + 3px);
+          top: 16px;
+          left: calc(50vw + 9px);
           width: 10px;
           height: 10px;
         }
