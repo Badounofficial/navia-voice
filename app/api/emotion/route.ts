@@ -23,21 +23,18 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'No audio file provided' }, { status: 400 });
     }
 
-    // Build form data for Hume (models config goes in URL, not form body)
+    // Build form data for Hume
     const humeForm = new FormData();
     humeForm.append('file', audioFile, 'audio.webm');
+    humeForm.append('models', JSON.stringify({ prosody: {} }));
 
-    const modelsConfig = encodeURIComponent(JSON.stringify({ prosody: {} }));
-    const response = await fetch(
-      `https://api.hume.ai/v0/batch/jobs?models=${modelsConfig}`,
-      {
-        method: 'POST',
-        headers: {
-          'X-Hume-Api-Key': apiKey,
-        },
-        body: humeForm,
-      }
-    );
+    const response = await fetch('https://api.hume.ai/v0/batch/jobs', {
+      method: 'POST',
+      headers: {
+        'X-Hume-Api-Key': apiKey,
+      },
+      body: humeForm,
+    });
 
     if (!response.ok) {
       console.warn('Hume API error:', await response.text());

@@ -12,8 +12,6 @@ import { streamChat, type ConversationTurn, type ClaudeStreamCallbacks } from '.
 import { speak, prewarm as prewarmVoice } from './elevenlabs';
 import { VoiceActivityDetector } from './vad';
 import { StreamingAudioPlayer } from './audio-player';
-import { BinauralSoundscape } from './soundscape';
-import { humanize } from './humanize';
 
 // ─── Types ──────────────────────────────────────────
 
@@ -21,7 +19,7 @@ export type PipelineState =
   | 'idle'        // Waiting, microphone ready
   | 'listening'   // User is speaking
   | 'processing'  // Whisper + Hume + Claude working
-  | 'speaking'    // Navia is responding with voice
+  | 'speaking'    // Ozaia is responding with voice
   | 'error';      // Something went wrong
 
 export interface PipelineCallbacks {
@@ -53,23 +51,19 @@ export class VoicePipeline {
   private callbacks: PipelineCallbacks;
   private vad: VoiceActivityDetector | null = null;
   private player: StreamingAudioPlayer;
-  private soundscape: BinauralSoundscape;
   private history: ConversationTurn[] = [];
   private language: 'en' | 'fr' = 'en';
   private isDestroyed = false;
 
   constructor(callbacks: PipelineCallbacks) {
     this.callbacks = callbacks;
-    this.soundscape = new BinauralSoundscape();
 
     this.player = new StreamingAudioPlayer({
       onPlaybackStart: () => {
         this.setState('speaking');
-        this.soundscape.duck(); // Fade down background when Navia speaks
       },
       onPlaybackEnd: () => {
-        this.soundscape.unduck(); // Bring background back up
-        // Navia finished speaking, resume listening
+        // Ozaia finished speaking, resume listening
         this.setState('idle');
         this.vad?.resume();
       },
@@ -81,17 +75,6 @@ export class VoicePipeline {
   async start(): Promise<void> {
     // Initialize audio player (requires user gesture)
     this.player.init();
-
-    // Start the binaural soundscape (shares AudioContext with player)
-    // Skip when embedded in iframe (parent site provides ambient sound)
-    const inIframe = typeof window !== 'undefined' && window.self !== window.top;
-    const ctx = this.player.getAudioContext();
-    if (ctx && !inIframe) {
-      // Don't await - let it load in background
-      this.soundscape.start(ctx).catch(() => {
-        // Soundscape is non-critical
-      });
-    }
 
     // Pre-warm ElevenLabs connection
     prewarmVoice();
@@ -116,7 +99,6 @@ export class VoicePipeline {
   destroy(): void {
     this.isDestroyed = true;
     this.vad?.stop();
-    this.soundscape.stop();
     this.player.stop();
     this.history = [];
   }
@@ -221,9 +203,8 @@ export class VoicePipeline {
           this.callbacks.onResponseToken(token);
         },
         onSentence: (sentence) => {
-          // Apply voice humanisms then send to ElevenLabs
-          const humanized = humanize(sentence);
-          const speakPromise = speak({ text: humanized })
+          // Send each sentence to ElevenLabs immediately
+          const speakPromise = speak({ text: sentence })
             .then((response) => this.player.enqueue(response))
             .catch((err) => {
               console.warn('TTS failed for sentence, displaying text instead:', err);

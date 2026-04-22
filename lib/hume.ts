@@ -27,7 +27,7 @@ const CONFIDENCE_THRESHOLD = 0.3;
 const TOP_N = 3;
 
 /**
- * Map Hume's 48 raw emotion labels to softer, Navia-appropriate language.
+ * Map Hume's 48 raw emotion labels to softer, Ozaia-appropriate language.
  * We only map the ones most relevant to women's well-being conversations.
  */
 const EMOTION_LABELS: Record<string, string> = {

@@ -3,7 +3,7 @@
  * Sends the assembled prompt to Claude Opus and streams the response.
  *
  * Prompt assembly order (from Voice Pipeline Architecture doc):
- * 1. System prompt (Navia personality, guardrails, voice rules)
+ * 1. System prompt (Ozaia personality, guardrails, voice rules)
  * 2. Session context (time of day, language)
  * 3. Conversation history (last 20 turns, trimmed to 8K tokens)
  * 4. Emotion context line (from Hume, if available)

@@ -1,6 +1,6 @@
-# Navia Voice - Phase 2A Prototype
+# Ozaia Voice - Phase 2A Prototype
 
-Voice conversation loop: she speaks, Navia listens, thinks, and responds with her own voice.
+Voice conversation loop: she speaks, Ozaia listens, thinks, and responds with her own voice.
 
 ## Architecture
 
@@ -71,7 +71,7 @@ lib/
   vad.ts                Voice Activity Detection
   audio-player.ts       Streaming audio playback
 prompts/
-  system-v0.3.txt       Navia system prompt
+  system-v0.3.txt       Ozaia system prompt
 ```
 
 ## How the pipeline works

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Navia',
+  title: 'Ozaia',
   description: 'Your voice companion for holistic well-being.',
   themeColor: '#2B2940',
 };

@@ -106,7 +106,7 @@ export class VoiceActivityDetector {
     this.mediaRecorder = null;
   }
 
-  /** Pause detection (e.g., while Navia is speaking) */
+  /** Pause detection (e.g., while Ozaia is speaking) */
   pause(): void {
     this.active = false;
     cancelAnimationFrame(this.rafId);
@@ -116,7 +116,7 @@ export class VoiceActivityDetector {
     }
   }
 
-  /** Resume detection after Navia finishes speaking */
+  /** Resume detection after Ozaia finishes speaking */
   resume(): void {
     if (this.analyser) {
       this.active = true;

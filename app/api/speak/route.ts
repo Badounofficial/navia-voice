@@ -1,7 +1,7 @@
 /**
  * ElevenLabs Voice Synthesis Proxy (Streaming)
  * Receives text, streams audio back from ElevenLabs.
- * Uses Navia's voice (Katie stock, then PVC clone). API key stays private.
+ * Uses Ozaia's PVC clone voice. API key stays private.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -41,13 +41,12 @@ export async function POST(request: NextRequest) {
         },
         body: JSON.stringify({
           text,
-          model_id: model_id || 'eleven_multilingual_v2',
+          model_id: model_id || 'eleven_flash_v2_5',
           voice_settings: voice_settings || {
-            speed: 0.85,
-            stability: 0.45,
-            similarity_boost: 0.64,
-            style: 0.18,
-            use_speaker_boost: false,
+            stability: 0.50,
+            similarity_boost: 0.80,
+            style: 0.35,
+            use_speaker_boost: true,
           },
           output_format: 'mp3_44100_128',
         }),
